@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-
 @Injectable()
 export class AuthService {
     constructor(
@@ -18,7 +17,7 @@ export class AuthService {
         if (existingUser) {
             throw new HttpException('User already exists', HttpStatus.CONFLICT);
         }
-        const hashedPassword = await bcrypt.hash(registerPayload.password, 10);
+        const hashedPassword = bcrypt.hashSync(registerPayload.password, 10);
         const user = this.usersRepository.create({
             username: registerPayload.username,
             fullName: registerPayload.fullName,
@@ -32,15 +31,16 @@ export class AuthService {
 
 
     async validateUser(loginPayload: LoginPayload) {
-        const { username, password } = loginPayload;
-        const user = await this.usersRepository.findOneBy({ username });
-        console.log(user);
-        const isMatch: boolean = bcrypt.compareSync(password, user.password);
+        const user = await this.usersRepository.findOneBy({ username: loginPayload.username });
+        if (!user) {
+            throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+        }
+
+        const isMatch: boolean = await bcrypt.compare(loginPayload.password, user.password)
         if (!isMatch) {
             throw new BadRequestException('Password does not match');
         }
-        if (user) return user;
-        throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+        return user;
     }
 
     async generateJwtToken(user: User) {

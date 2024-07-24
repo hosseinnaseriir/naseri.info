@@ -6,9 +6,6 @@ import { ConfigModule } from '@nestjs/config';
 import { BillingReport, Course, User } from '@/entities';
 import { AuthModule } from '@/modules/auth/auth.module';
 import { DataSource } from 'typeorm';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtGuard } from '@/modules/auth/jwt.guard';
-import { JwtStrategy } from '@/modules/auth/jwt.strategy';
 
 @Module({
   imports: [

@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Course } from "@Entities";
-import { BillingReport } from "@Entities";
+import { Course } from "@/models";
+import { BillingReport } from "@/models";
+import { Role } from "@/enums";
 
 @Entity({
     name: "users"
@@ -39,6 +40,9 @@ export class User {
 
     @OneToMany(() => Course, course => course.id)
     courses: Course[];
+
+    @Column({ default: Role.User })
+    role: string;
 
     @OneToMany(() => BillingReport, billingReport => billingReport.id)
     billingReports: BillingReport[];

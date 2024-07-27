@@ -1,14 +1,17 @@
-import { LoginPayload, RegisterPayload } from '@/entities';
-import { Body, Controller, HttpCode, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { LoginPayload, RegisterPayload } from '@/models';
+import {
+    Body, Controller, HttpCode, HttpException, HttpStatus, Post, UseGuards
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
-import { Public } from './public.decorator';
+import { Public } from '../../decorators/public.decorator';
 
-@Public()
+
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
 
+    @Public()
     @Post("/register")
     @HttpCode(HttpStatus.CREATED)
     async register(@Body() registerPayload: RegisterPayload) {
@@ -19,8 +22,10 @@ export class AuthController {
             throw new HttpException(ex.message, HttpStatus.BAD_REQUEST);
         }
     }
-    @UseGuards(AuthGuard('local'))
+
+    @Public()
     @Post("/validate")
+    @UseGuards(AuthGuard('local'))
     @HttpCode(HttpStatus.OK)
     async validate(@Body() loginPayload: LoginPayload) {
         try {

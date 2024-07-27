@@ -3,9 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { BillingReport, Course, User } from '@/entities';
+import { BillingReport, Course, User } from '@/models';
 import { AuthModule } from '@/modules/auth/auth.module';
-import { DataSource } from 'typeorm';
+import { UserModule } from '@/modules/user';
 
 @Module({
   imports: [
@@ -23,8 +23,8 @@ import { DataSource } from 'typeorm';
       entities: [User, Course, BillingReport],
       synchronize: true, // should disable in prod
     }),
-
-    AuthModule
+    AuthModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [
@@ -32,5 +32,4 @@ import { DataSource } from 'typeorm';
   ],
 })
 export class AppModule {
-  constructor(private dataSource: DataSource) { }
 }

@@ -34,4 +34,3 @@ export class RegisterPayload {
 
     dateOfBirth: Date;
 }
-

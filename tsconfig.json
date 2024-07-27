@@ -27,10 +27,10 @@
         "./src/app/index"
       ],
       "@Entities/*": [
-        "./src/entities/*"
+        "src/models/*"
       ],
       "@Entities": [
-        "./src/entities/index"
+        "src/models/index"
       ],
     },
     "incremental": true,

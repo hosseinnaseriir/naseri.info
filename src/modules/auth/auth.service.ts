@@ -1,4 +1,4 @@
-import { LoginPayload, RegisterPayload, User } from '@/entities';
+import { LoginPayload, RegisterPayload, User } from '@/models';
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -43,8 +43,8 @@ export class AuthService {
         return user;
     }
 
-    async generateJwtToken(user: User) {
-        const payload = { username: user.username, sub: user.id };
-        return this.jwtService.sign(payload);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async generateJwtToken({ password, ...user }: User) {
+        return this.jwtService.sign({ ...user });
     }
 }
